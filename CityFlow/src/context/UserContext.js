@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 // Importăm librăria colegului pentru salvare (AsyncStorage)
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Creăm contextul
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -67,4 +68,5 @@ export const UserProvider = ({ children }) => {
   );
 };
 
+// Hook-ul custom pe care îl imporți tu
 export const useUser = () => useContext(UserContext);
