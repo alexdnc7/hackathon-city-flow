@@ -1,0 +1,26 @@
+[
+  {
+    "id": "loc_cj_1",
+    "name": "Piața Unirii",
+    "address": "Piata Unirii, Cluj-Napoca, Romania", 
+    "description": "Centrul zero al Clujului...",
+    "coordinates": { "lat": 46.7693, "long": 23.5898 },
+    "type": "mainstream"
+  },
+  {
+    "id": "loc_cj_2",
+    "name": "Zidul Cetății",
+    "address": "Strada Potaissa, Cluj-Napoca, Romania",
+    "description": "O stradă pietonală liniștită...",
+    "coordinates": { "lat": 46.7674, "long": 23.5866 },
+    "type": "hidden_gem"
+  },
+  {
+    "id": "loc_cj_3",
+    "name": "Parcul Central Simion Bărnuțiu",
+    "address": "Parcul Central, Cluj-Napoca, Romania",
+    "description": "Parcul mare al orașului...",
+    "coordinates": { "lat": 46.7689, "long": 23.5786 },
+    "type": "mainstream"
+  }
+]
