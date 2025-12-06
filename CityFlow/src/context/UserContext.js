@@ -1,31 +1,56 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [coins, setCoins] = useState(0); 
-  const [chatHistory, setChatHistory] = useState([]); // Aici ținem istoricul
+  const [coins, setCoins] = useState(500); 
+  const [chatHistory, setChatHistory] = useState([]); 
+
+  useEffect(() => {
+    const loadCoins = async () => {
+      try {
+        const storedCoins = await AsyncStorage.getItem('userCoins');
+        if (storedCoins !== null) {
+          setCoins(parseInt(storedCoins));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadCoins();
+  }, []);
+
+  const updateBalance = (newAmount) => {
+    setCoins(newAmount);
+    AsyncStorage.setItem('userCoins', newAmount.toString());
+  };
 
   const addCoins = (amount) => {
-    setCoins(prev => prev + amount);
+    updateBalance(coins + amount);
   };
 
   const spendCoins = (amount) => {
     if (coins >= amount) {
-      setCoins(prev => prev - amount);
+      updateBalance(coins - amount);
       return true; 
     }
     return false; 
   };
 
-  // Funcție nouă: Salvează o discuție în istoric
   const addToHistory = (title) => {
     const newEntry = { id: Date.now(), title: title, date: new Date().toLocaleDateString() };
-    setChatHistory(prev => [newEntry, ...prev]); // Adăugăm la începutul listei
+    setChatHistory(prev => [newEntry, ...prev]); 
   };
 
   return (
-    <UserContext.Provider value={{ coins, addCoins, spendCoins, chatHistory, addToHistory }}>
+    <UserContext.Provider value={{ 
+      coins, 
+      addCoins,    
+      spendCoins,  
+      chatHistory, 
+      addToHistory 
+    }}>
       {children}
     </UserContext.Provider>
   );
