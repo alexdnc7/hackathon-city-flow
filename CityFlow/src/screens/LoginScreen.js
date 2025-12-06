@@ -1,4 +1,3 @@
-// src/screens/LoginScreen.js
 import React, { useState } from "react";
 import { 
   View, 
@@ -10,9 +9,12 @@ import {
   Image,
   ActivityIndicator
 } from "react-native";
+// IMPORT NOU: Pentru navigare
+import { useRouter } from "expo-router";
 import { loginUser } from "../services/authService";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
+  const router = useRouter(); // Inițializăm router-ul
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,6 +23,8 @@ export default function LoginScreen({ navigation }) {
     setLoading(true);
     try {
       await loginUser(email, password);
+      // MODIFICARE PRINCIPALĂ: Navigăm către grupul (drawer) unde e Chat-ul
+      router.replace('/(drawer)'); 
     } catch (error) {
       Alert.alert("Eroare", "Email sau parolă incorectă.");
     } finally {
@@ -29,7 +33,6 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleGoogleLogin = () => {
-    // Pentru Hackathon, afișăm doar o alertă dacă nu avem setup-ul complet de Google Cloud
     Alert.alert("Info", "Autentificarea cu Google necesită configurare Google Cloud Console.");
   };
 
@@ -64,6 +67,7 @@ export default function LoginScreen({ navigation }) {
 
       {/* === BUTONUL GOOGLE === */}
       <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
+        {/* Asigură-te că ai imaginea în assets sau șterge Image dacă dă eroare */}
         <Image 
             source={require('../../assets/images/google.png')} 
             style={styles.googleIcon} 
@@ -73,7 +77,7 @@ export default function LoginScreen({ navigation }) {
 
       <View style={styles.footer}>
         <Text style={{color: '#666'}}>Nu ai cont?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <TouchableOpacity onPress={() => router.push("Register")}>
           <Text style={styles.linkText}> Înregistrează-te</Text>
         </TouchableOpacity>
       </View>
@@ -88,10 +92,10 @@ const styles = StyleSheet.create({
   input: { 
     borderWidth: 1, 
     borderColor: "#ddd", 
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f9f9f9", 
     padding: 15, 
     marginBottom: 15, 
-    borderRadius: 10,
+    borderRadius: 10, 
     fontSize: 16
   },
   button: {
@@ -104,7 +108,6 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
   
-  // Stiluri Google
   googleButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -115,8 +118,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
-    elevation: 2, // Umbra pe Android
-    shadowColor: '#000', // Umbra pe iOS
+    elevation: 2, 
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
