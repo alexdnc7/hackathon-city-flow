@@ -1,18 +1,16 @@
 import React from 'react';
-// Importăm Stack pentru navigarea generală
-import { Stack } from 'expo-router'; 
-// Importăm Banca (Providerul). Calea este corectă aici: ../src...
+import { Stack } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserProvider } from '../src/context/UserContext';
 
 export default function RootLayout() {
   return (
-    // 1. Împachetăm totul în Provider (Bancă)
     <UserProvider>
-      {/* 2. Definim navigarea principală */}
-      <Stack>
-        {/* Ascundem header-ul pentru că îl avem pe cel din Tabs */}
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+        </Stack>
+      </GestureHandlerRootView>
     </UserProvider>
   );
 }

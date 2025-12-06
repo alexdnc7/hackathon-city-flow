@@ -6,15 +6,15 @@ import {
   TouchableOpacity, 
   StyleSheet, 
   Modal, 
-  SafeAreaView, 
-  StatusBar 
+  StatusBar,
+  Platform 
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-// IMPORTANT: Importăm hook-ul de la bancă.
-// Asigură-te că fișierul UserContext.js există în ../context/
 import { useUser } from '../context/UserContext'; 
+import { useNavigation } from 'expo-router';
+import { DrawerActions } from '@react-navigation/native';
 
-// Baza de date fictivă (Produsele)
 const MOCK_VOUCHERS = [
   {
     id: '1',
@@ -34,7 +34,7 @@ const MOCK_VOUCHERS = [
   },
   {
     id: '3',
-    title: 'Limonadă cu Mentă',
+    title: 'Limonadă Mentă',
     shop: 'Parcul Central',
     cost: 80,
     color: '#C8E6C9',
@@ -43,29 +43,21 @@ const MOCK_VOUCHERS = [
 ];
 
 export default function MarketScreen() {
-  // AICI ESTE SCHIMBAREA PRINCIPALĂ:
-  // Nu mai folosim useState pentru coins, ci luăm datele din Context (Bancă)
+  const navigation = useNavigation();
   const { coins, spendCoins } = useUser(); 
-
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedVoucher, setSelectedVoucher] = useState(null);
 
-  // Funcția de cumpărare actualizată
   const handleBuy = (item) => {
-    // Încercăm să cheltuim banii prin funcția din context
     const success = spendCoins(item.cost);
-
     if (success) {
-      // Dacă am avut bani
       setSelectedVoucher(item);
       setModalVisible(true);
     } else {
-      // Dacă nu am avut bani
-      alert("You don`t have enough tokens! Complete more tasks");
+      alert("Nu ai destule monede! Completează task-uri în oraș.");
     }
   };
 
-  // Cum arată un card de produs
   const renderVoucher = ({ item }) => (
     <View style={[styles.card, { backgroundColor: item.color }]}>
       <View style={styles.iconContainer}>
@@ -90,13 +82,18 @@ export default function MarketScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       
-      {/* Header Portofel */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Portofel Digital</Text>
+      <View style={styles.navHeader}>
+        <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+          <Ionicons name="menu" size={30} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.navTitle}>Rewards Market</Text>
+        <View style={{width: 30}} />
+      </View>
+
+      <View style={styles.balanceSection}>
         <View style={styles.balanceContainer}>
           <Ionicons name="wallet-outline" size={40} color="#333" />
           <View style={{marginLeft: 10}}>
-            {/* Afișăm monedele din Context */}
             <Text style={styles.balanceText}>{coins}</Text>
             <Text style={styles.currencyLabel}>CityCoins</Text>
           </View>
@@ -105,7 +102,6 @@ export default function MarketScreen() {
 
       <View style={styles.divider} />
 
-      {/* Lista Produse */}
       <Text style={styles.sectionTitle}>Cheltuiește inteligent</Text>
       <FlatList
         data={MOCK_VOUCHERS}
@@ -115,7 +111,6 @@ export default function MarketScreen() {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* Pop-up cu QR Code */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -147,22 +142,29 @@ export default function MarketScreen() {
   );
 }
 
-// Stiluri CSS-in-JS
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
     backgroundColor: '#fff',
-    paddingTop: 10 
   },
-  header: { 
-    padding: 20, 
-    paddingTop: 10 
+  navHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    paddingTop: Platform.OS === 'android' ? 20 : 10,
   },
-  headerTitle: { 
-    fontSize: 14, 
-    color: '#888', 
-    textTransform: 'uppercase', 
-    letterSpacing: 1 
+  navTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    textTransform: 'uppercase',
+    letterSpacing: 1
+  },
+  balanceSection: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   balanceContainer: { 
     flexDirection: 'row', 
