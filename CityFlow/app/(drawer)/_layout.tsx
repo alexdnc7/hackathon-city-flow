@@ -13,23 +13,25 @@ export default function DrawerLayout() {
           drawerActiveBackgroundColor: '#333',
           drawerActiveTintColor: '#fff',
           drawerInactiveTintColor: '#333',
-          drawerLabelStyle: { marginLeft: 0, fontWeight: '600', fontSize: 15 },
+          drawerLabelStyle: { marginLeft: 0, fontWeight: '600' },
           drawerItemStyle: { borderRadius: 10, marginHorizontal: 10 },
         }}
       >
+        {/* CHATUL ESTE ACUM "index" */}
         <Drawer.Screen
           name="index"
           options={{
             drawerLabel: 'Chat',
-            title: 'Chat',
+            title: 'City Chat',
             drawerIcon: ({ color }) => <Ionicons name="chatbubble-ellipses-outline" size={24} color={color} />,
           }}
         />
-        {/* AICI ESTE SCHIMBAREA IMPORTANTĂ: */}
+
+        {/* MARKETUL ESTE "market" */}
         <Drawer.Screen
           name="market"
           options={{
-            drawerLabel: 'Rewards Market', // Numele care apare în meniu
+            drawerLabel: 'Rewards Market',
             title: 'Rewards',
             drawerIcon: ({ color }) => <Ionicons name="gift-outline" size={24} color={color} />,
           }}
