@@ -1,36 +1,34 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function LoginScreen() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-        setLoading(false);
-        // Ne duce către Drawer (care va deschide Chat-ul)
-        router.replace('/(drawer)'); 
-    }, 1000);
-  };
-
+export default function Page() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>CityFlow Login</Text>
-      <TextInput style={styles.input} placeholder="Email" />
-      <TextInput style={styles.input} placeholder="Parolă" secureTextEntry />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          {loading ? <ActivityIndicator color="#FFF"/> : <Text style={styles.buttonText}>INTRĂ ÎN CONT</Text>}
-      </TouchableOpacity>
+      <View style={styles.main}>
+        <Text style={styles.title}>Hello World</Text>
+        <Text style={styles.subtitle}>This is the first page of your app.</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "#fff" },
-  title: { fontSize: 32, fontWeight: "bold", textAlign: "center", color: "#28a745", marginBottom: 40 },
-  input: { borderWidth: 1, borderColor: "#ddd", backgroundColor: "#f9f9f9", padding: 15, marginBottom: 15, borderRadius: 10 },
-  button: { backgroundColor: "#28a745", padding: 15, borderRadius: 10, alignItems: "center" },
-  buttonText: { color: "#fff", fontSize: 18, fontWeight: "bold" }
+  container: {
+    flex: 1,
+    alignItems: "center",
+    padding: 24,
+  },
+  main: {
+    flex: 1,
+    justifyContent: "center",
+    maxWidth: 960,
+    marginHorizontal: "auto",
+  },
+  title: {
+    fontSize: 64,
+    fontWeight: "bold",
+  },
+  subtitle: {
+    fontSize: 36,
+    color: "#38434D",
+  },
 });

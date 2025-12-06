@@ -30,8 +30,10 @@ export default function RegisterScreen({ navigation }) {
 
     setLoading(true);
     try {
+      // 1. Facem contul în Firebase
       await registerUser(email, password);
-      // Nu trebuie să navigăm manual, AuthContext va detecta userul și va schimba ecranul automat
+      // 2. AuthContext va detecta automat userul nou și te va duce în Market
+      // Nu e nevoie de navigare manuală
     } catch (error) {
       Alert.alert("Eroare la înregistrare", error.message);
     } finally {
@@ -42,7 +44,7 @@ export default function RegisterScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Creează Cont</Text>
-      <Text style={styles.subtitle}>Alătură-te CityFlow pentru recompense!</Text>
+      <Text style={styles.subtitle}>Începe cu 0 CityCoins și câștigă vizitând!</Text>
 
       <TextInput
         style={styles.input}
@@ -73,7 +75,7 @@ export default function RegisterScreen({ navigation }) {
         <ActivityIndicator size="large" color="#007AFF" />
       ) : (
         <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Înregistrează-te</Text>
+          <Text style={styles.buttonText}>Creează Cont</Text>
         </TouchableOpacity>
       )}
 
@@ -87,7 +89,7 @@ export default function RegisterScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "#fff" },
   title: { fontSize: 28, fontWeight: "bold", marginBottom: 5, textAlign: "center", color: "#333" },
-  subtitle: { fontSize: 16, color: "#666", marginBottom: 30, textAlign: "center" },
+  subtitle: { fontSize: 14, color: "#666", marginBottom: 30, textAlign: "center" },
   input: { 
     borderWidth: 1, 
     borderColor: "#ddd", 
