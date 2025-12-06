@@ -1,10 +1,10 @@
 // src/config/firebase.js
 import { initializeApp } from "firebase/app";
-// 1. Importăm initializeAuth și getReactNativePersistence (NU getAuth simplu)
-import { initializeAuth, getReactNativePersistence, getAuth } from "firebase/auth";
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+// Importăm inMemoryPersistence -> Asta face ca login-ul să se șteargă când închizi app
+import { initializeAuth, getAuth, inMemoryPersistence } from "firebase/auth"; 
 
 const firebaseConfig = {
+  // PUNE DATELE TALE REALE AICI
   apiKey: "AIzaSyBzj7ZqMIp0d0Ggm2XoW1ClTah-9v1cRG0",
   authDomain: "cityflow-89c62.firebaseapp.com",
   projectId: "cityflow-89c62",
@@ -13,18 +13,16 @@ const firebaseConfig = {
   appId: "1:476171573424:web:720c0e01ca535ab4814375"
 };
 
-// Inițializăm aplicația
 const app = initializeApp(firebaseConfig);
 
-// 2. Inițializăm Auth cu persistență (ca să nu te delogheze când închizi app-ul)
-// Această verificare "auth" previne inițializarea dublă
 let auth;
 try {
+  // Încercăm să setăm persistența doar în memorie (RAM)
   auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+    persistence: inMemoryPersistence
   });
 } catch (e) {
-  // Dacă auth e deja inițializat (se poate întâmpla la refresh rapid), îl luăm pe cel existent
+  // Fallback
   auth = getAuth(app);
 }
 
