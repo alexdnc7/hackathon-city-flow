@@ -1,17 +1,16 @@
-// src/navigation/RootNavigator.js in proiectul COLEGULUI
+// src/navigation/RootNavigator.js
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../hooks/useAuth";
 
-
-// Ecranele Tale
+// Ecranele de Autentificare
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 
-// ECRANUL LUI (Aici trebuie să pui numele corect al fișierului lui)
-// Presupunem că se numește MarketScreen
-import MarketScreen from "../screens/MarketScreen"; 
+// Importăm Navigatorul Principal (care conține Meniul/Chat-ul/Market-ul)
+// Acest fișier "AppNavigator.js" trebuie să existe în folderul navigation!
+import AppNavigator from "./AppNavigator"; 
 
 const Stack = createNativeStackNavigator();
 
@@ -22,10 +21,10 @@ export default function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {user ? (
-          // === LUMEA LUI (Aici ajungi după login) ===
-          <Stack.Screen name="Market" component={MarketScreen} />
+          // === DACA ESTI LOGAT: Mergi la Navigatorul Principal (Chat + Market + Meniu) ===
+          <Stack.Screen name="MainApp" component={AppNavigator} />
         ) : (
-          // === LUMEA TA (Autentificare) ===
+          // === DACA NU ESTI LOGAT: Arată Ecranele de Login ===
           <Stack.Group>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />

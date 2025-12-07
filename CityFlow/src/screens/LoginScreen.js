@@ -1,3 +1,4 @@
+// src/screens/LoginScreen.js
 import React, { useState } from "react";
 import { 
   View, 
@@ -9,12 +10,10 @@ import {
   Image,
   ActivityIndicator
 } from "react-native";
-// IMPORT NOU: Pentru navigare
-import { useRouter } from "expo-router";
 import { loginUser } from "../services/authService";
 
-export default function LoginScreen() {
-  const router = useRouter(); // Inițializăm router-ul
+// Primim { navigation } ca prop (Standard React Navigation)
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,8 +22,8 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await loginUser(email, password);
-      // MODIFICARE PRINCIPALĂ: Navigăm către grupul (drawer) unde e Chat-ul
-      router.replace('/(drawer)'); 
+      // NU TREBUIE să navigăm manual.
+      // RootNavigator.js ascultă 'user' din AuthContext și schimbă automat ecranul.
     } catch (error) {
       Alert.alert("Eroare", "Email sau parolă incorectă.");
     } finally {
@@ -33,7 +32,7 @@ export default function LoginScreen() {
   };
 
   const handleGoogleLogin = () => {
-    Alert.alert("Info", "Autentificarea cu Google necesită configurare Google Cloud Console.");
+    Alert.alert("Info", "Autentificarea cu Google necesită configurare suplimentară în Firebase Console.");
   };
 
   return (
@@ -67,7 +66,7 @@ export default function LoginScreen() {
 
       {/* === BUTONUL GOOGLE === */}
       <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
-        {/* Asigură-te că ai imaginea în assets sau șterge Image dacă dă eroare */}
+        {/* Asigurați-vă că imaginea google.png există în src/assets/images/ */}
         <Image 
             source={require('../../assets/images/google.png')} 
             style={styles.googleIcon} 
@@ -77,7 +76,7 @@ export default function LoginScreen() {
 
       <View style={styles.footer}>
         <Text style={{color: '#666'}}>Nu ai cont?</Text>
-        <TouchableOpacity onPress={() => router.push("Register")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text style={styles.linkText}> Înregistrează-te</Text>
         </TouchableOpacity>
       </View>
