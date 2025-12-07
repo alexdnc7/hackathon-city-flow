@@ -1,6 +1,5 @@
 // src/config/firebase.js
 import { initializeApp } from "firebase/app";
-// Importăm uneltele necesare pentru persistență pe mobil
 import { initializeAuth, getReactNativePersistence, getAuth } from "firebase/auth";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -16,16 +15,16 @@ const firebaseConfig = {
 // Inițializăm aplicația
 const app = initializeApp(firebaseConfig);
 
-// 2. Inițializăm Auth cu persistență (ca să nu te delogheze când închizi app-ul)
+// 2. Inițializăm Auth cu persistență pentru mobile
 let auth;
 try {
-  // Aceasta este metoda CORECTĂ pentru React Native/Expo
   auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
   });
 } catch (e) {
-  // Dacă auth e deja inițializat (se poate întâmpla la refresh rapid), îl luăm pe cel existent
+  // Dacă auth e deja inițializat, îl luăm pe cel existent
   auth = getAuth(app);
+  console.log("Auth deja inițializat:", e.message);
 }
 
 export { auth };

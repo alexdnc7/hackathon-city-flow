@@ -24,7 +24,7 @@ export default function MarketScreen() {
       setSelectedVoucher(item);
       setModalVisible(true);
     } else {
-      alert("Nu ai destule monede!");
+      alert("Nu ai suficient credit! Mai vizitează locații pentru a câștiga.");
     }
   };
 
@@ -34,7 +34,7 @@ export default function MarketScreen() {
       <View style={styles.cardInfo}>
         <Text style={styles.shopName}>{item.shop}</Text>
         <Text style={styles.voucherTitle}>{item.title}</Text>
-        <Text style={styles.costText}>{item.cost} Coins</Text>
+        <Text style={styles.costText}>{item.cost}</Text>
       </View>
       <TouchableOpacity style={styles.buyButton} onPress={() => handleBuy(item)}>
         <Text style={styles.buyButtonText}>Cumpara</Text>
@@ -60,7 +60,8 @@ export default function MarketScreen() {
           <Ionicons name="wallet-outline" size={40} color="#333" />
           <View style={{marginLeft: 10}}>
             <Text style={styles.balanceText}>{coins}</Text>
-            <Text style={styles.currencyLabel}>CityCoins</Text>
+            {/* Currency label hidden per UX request */}
+            <Text style={styles.currencyLabel} />
           </View>
         </View>
       </View>

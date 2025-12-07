@@ -1,50 +1,82 @@
 // src/services/visionService.js
 import { Platform } from 'react-native';
 
-// ⚠️ ÎNLOCUIEȘTE CU IP-UL TĂU LOCAL (ex: 192.168.1.5)
-// Păstrează portul pe care rulează serverul tău backend (ex: 3000 sau 5000)
-// src/services/visionService.js
-const API_URL = 'http://192.168.34.105:3000/api/analyze';
+// ⚠️ CONFIGURARE DINAMICĂ A URL-UL API
+// Pe mobil, schimbă 'localhost' cu IP-ul local al computerului (ex: 192.168.1.5)
+// Asigură-te că portul corespunde cu cel din backend (de obicei 8000 pentru FastAPI)
+const API_BASE_URL = 'http://192.168.34.106:8000'; // IP corect din Wi-Fi
+const CHAT_URL = `${API_BASE_URL}/chat`;
+const VERIFY_URL = `${API_BASE_URL}/verify`;
 
-export const sendToVisionAPI = async (text, imageUri) => {
+// --- Apelează endpoint-ul de CHAT pentru răspunsuri AI ---
+export const sendChatMessage = async (text, lat, long) => {
+  try {
+    console.log("📤 Trimit mesaj la Chat endpoint:", CHAT_URL);
+    
+    const response = await fetch(CHAT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: text,
+        lat: lat,
+        long: long
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Eroare HTTP: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("✅ Răspuns primit de la Chat:", data);
+    return data;
+
+  } catch (error) {
+    console.error("❌ Eroare la conexiunea cu Chat endpoint:", error);
+    throw error;
+  }
+};
+
+// --- Apelează endpoint-ul de VERIFY pentru imagini ---
+export const sendToVisionAPI = async (imageUri, locationName) => {
   try {
     const formData = new FormData();
 
-    // 1. Adăugăm Textul (dacă există)
-    if (text) {
-      formData.append('message', text); // 'message' trebuie să fie numele așteptat de backend
-    }
-
-    // 2. Adăugăm Poza (dacă există)
+    // Adăugăm imaginea
     if (imageUri) {
-      // Trebuie să construim un obiect de tip fișier
       const filename = imageUri.split('/').pop();
       const match = /\.(\w+)$/.exec(filename);
       const type = match ? `image/${match[1]}` : `image`;
 
-      formData.append('image', {
-        uri: Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri,
+      formData.append('file', {
+        uri: imageUri,
         name: filename,
         type: type,
       });
     }
 
-    // 3. Trimitem cererea către Backend
-    console.log("Trimit către:", API_URL);
+    // Adăugăm locația
+    formData.append('location_name', locationName);
+
+    console.log("📸 Trimit imagine la Verify endpoint:", VERIFY_URL);
     
-    const response = await fetch(API_URL, {
+    const response = await fetch(VERIFY_URL, {
       method: 'POST',
       body: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data', // Esențial pentru poze
-      },
     });
 
+    if (!response.ok) {
+      throw new Error(`Eroare HTTP: ${response.status}`);
+    }
+
     const data = await response.json();
-    return data; // Backend-ul ar trebui să returneze { reply: "..." } sau similar
+    console.log("✅ Răspuns primit de la Verify:", data);
+    return data;
 
   } catch (error) {
-    console.error("Eroare la conexiunea cu backend-ul:", error);
+    console.error("❌ Eroare la conexiunea cu Verify endpoint:", error);
     throw error;
   }
 };

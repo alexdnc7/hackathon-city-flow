@@ -44,7 +44,7 @@ export default function RegisterScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Creează Cont</Text>
-      <Text style={styles.subtitle}>Începe cu 0 CityCoins și câștigă vizitând!</Text>
+      <Text style={styles.subtitle}>Începe să explorezi orașul și descoperă locuri frumoase!</Text>
 
       <TextInput
         style={styles.input}

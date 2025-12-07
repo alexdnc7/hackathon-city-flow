@@ -3,19 +3,28 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../hooks/useAuth";
+import { ActivityIndicator, View } from "react-native";
 
 // Ecranele de Autentificare
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 
-// Importăm Navigatorul Principal (care conține Meniul/Chat-ul/Market-ul)
-// Acest fișier "AppNavigator.js" trebuie să existe în folderul navigation!
+// Importăm Navigatorul Principal
 import AppNavigator from "./AppNavigator"; 
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  // Arată un loading indicator în timp ce Firebase se inițializează
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#28a745" />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>

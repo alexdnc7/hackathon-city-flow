@@ -37,6 +37,19 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermissions": "Avem nevoie de locația ta pentru a te ajuta să gasești locuri."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permit accesul la galeria ta pentru a putea verifica pozele.",
+          "cameraPermission": "Permit accesul la camera pentru a lua poze."
+        }
       ]
     ],
     "experiments": {

@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useUser } from '../context/UserContext'; 
 
 export default function TaskValidator({ visible, onClose, onTaskComplete, targetCoords, targetName }) {
-  const { addCoins } = useUser();
+  const { /* addCoins */ } = useUser();
   const [loading, setLoading] = useState(false);
 
   // 1. Verificăm Locația
@@ -74,10 +74,10 @@ export default function TaskValidator({ visible, onClose, onTaskComplete, target
   };
 
   const handleSuccess = (photoUri) => {
-    addCoins(50); 
-    onTaskComplete(photoUri); 
-    onClose(); 
-    Alert.alert("Bravo! 🎉", "Locație verificată + Poză trimisă. Ai primit 50 CityCoins!");
+    // Rewarding via coins removed — only confirm success to the user
+    onTaskComplete(photoUri);
+    onClose();
+    Alert.alert("Bravo! 🎉", "Locație verificată și poză trimisă. Mulțumim!");
   };
 
   return (

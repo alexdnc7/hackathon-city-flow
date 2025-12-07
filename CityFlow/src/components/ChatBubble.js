@@ -2,8 +2,8 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 
 export default function ChatBubble({ message }) {
   const isUser = message.sender === 'user';
-  // Detectăm dacă e mesaj de reward (conține "Coins" sau "Traffic")
-  const isReward = !isUser && (message.text && (message.text.includes("Coins") || message.text.includes("Traffic")));
+  // Detectăm dacă e mesaj de reward (conține "Traffic") — nu tratăm mesaje cu 'Coins'
+  const isReward = !isUser && (message.text && message.text.includes("Traffic"));
 
   return (
     <View style={[

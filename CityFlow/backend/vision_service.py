@@ -100,44 +100,42 @@ def verify_image_with_ai(image_bytes, target_location_name):
         
         # Tentativă de parsare JSON
         content = completion.choices[0].message.content
-        
+
         # Verificare pentru răspuns gol sau None
         if not content or content.strip() == "":
             print("❌ 3/3: Răspuns gol de la AI")
-            return {"verified": False, "message": "Eroare: Imaginea nu a putut fi procesată de AI (Răspuns gol)."}
-        
+            return {"verified": False, "message": "Locația nu este regăsită în poză. Te rog încearcă o poză mai clară."}
+
         result = json.loads(content)
-        
+
         # --- 4. LOGICA DE REWARD FINALĂ ---
         if result.get("is_match"):
             print("🚀 3/3: Verificare reușită!")
             return {
-                "verified": True, 
-                "coins_earned": 50, 
-                "message": f"Super! AI-ul a confirmat că ești la {target_location_name}. Ai primit 50 coins!"
+                "verified": True,
+                "message": f"Super! AI-ul a confirmat că ești la {target_location_name}."
             }
         else:
             print(f"❌ 3/3: Verificare eșuată. Motiv: {result.get('reason', 'Necunoscut')}")
             return {
-                "verified": False, 
-                "coins_earned": 0, 
-                "message": f"Hopa! AI-ul nu recunoaște locul. Motiv: {result.get('reason', 'Necunoscut')}"
+                "verified": False,
+                "message": f"AI-ul nu recunoaște locul. Motiv: {result.get('reason', 'Necunoscut')}"
             }
 
     except APIError as e:
         # Erori de OpenAI (cheie, rețea)
         print(f"❌ Eroare OpenAI API: {e}")
         print(f"📍 Debug APIError details: {str(e)}")
-        return {"verified": False, "message": f"Eroare: Imaginea nu a putut fi procesată de AI (Răspuns gol)."}
-    
+        return {"verified": False, "message": "Locația nu este regăsită în poză. Te rog încearcă o poză mai clară."}
+
     except json.JSONDecodeError as parse_error:
         # Răspuns OpenAI invalid
         print(f"❌ Eroare Parsare: Răspunsul nu a fost JSON valid")
         print(f"📍 Debug content: {content}")
         print(f"📍 Debug parse_error: {str(parse_error)}")
-        return {"verified": False, "message": "Eroare: Imaginea nu a putut fi procesată de AI (Răspuns gol)."}
-        
+        return {"verified": False, "message": "Locația nu este regăsită în poză. Te rog încearcă o poză mai clară."}
+
     except Exception as e:
         print(f"❌ Eroare Necunoscută: {type(e).__name__}: {e}")
         print(f"📍 Debug exception: {str(e)}")
-        return {"verified": False, "message": "Eroare: Imaginea nu a putut fi procesată de AI (Răspuns gol)."}
+        return {"verified": False, "message": "Locația nu este regăsită în poză. Te rog încearcă o poză mai clară."}

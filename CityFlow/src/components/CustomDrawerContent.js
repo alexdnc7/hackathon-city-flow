@@ -54,8 +54,7 @@ export default function CustomDrawerContent(props) {
                 {user?.displayName || user?.email || "Vizitator CityFlow"}
             </Text>
             
-            {/* Aici afișăm BANII */}
-            <Text style={styles.userCoins}>🪙 {coins} Coins</Text>
+            {/* Afișarea contului (bani) ascunsă — nu afișăm CityCoins în UI */}
         </View>
 
         {/* --- B. BUTON DISCUTIE NOUA --- */}
