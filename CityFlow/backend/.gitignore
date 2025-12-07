@@ -1,0 +1,9 @@
+# Fisiere de configurare esentiale (SECRETE)
+.env
+*.json # Ignora orice fisier JSON, inclusiv cheia Google Cloud
+
+# Directoare Python & Temp
+__pycache__/
+venv/
+.pytest_cache/
+*.pyc

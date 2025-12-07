@@ -1,4 +1,5 @@
 # backend/main.py
+from vision_service import verify_image_with_ai
 from fastapi import FastAPI, UploadFile, File, Form
 from pydantic import BaseModel
 import uvicorn
@@ -20,18 +21,23 @@ async def chat_endpoint(data: ChatMessage):
     return response
 
 # --- Endpoint 2: VISION (Verificare Poză) ---
-@app.post("/verify")
-async def verify_endpoint(file: UploadFile = File(...), location_name: str = Form(...)):
-    # 1. Citim fișierul primit de la telefon în memorie (ca bytes)
-    image_bytes = await file.read()
-    
-    # 2. Îl trimitem la funcția noastră de AI
-    # Notă: Frontend-ul trebuie să trimită și numele locației (location_name)
-    result = verify_image_with_ai(image_bytes, location_name)
-    
-    return result
+# main.py (la final)
 
-# --- PORNIRE SERVER (Aceasta trebuie să fie ULTIMA parte din fișier) ---
-if __name__ == "__main__":
-    # HOST 0.0.0.0 este CRITIC ca sa te poti conecta de pe telefon prin Wi-Fi
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.post("/verify")
+async def verify_image(
+    file: UploadFile = File(...),
+    location_name: str = Form(...)
+):
+    """
+    Endpoint pentru verificarea unei imagini cu AI Vision.
+    """
+    try:
+        # Citirea conținutului imaginii
+        image_bytes = await file.read()
+
+        # Apelarea funcției tale (vision_service.py)
+        result = verify_image_with_ai(image_bytes, location_name)
+
+        return result
+    except Exception as e:
+        return {"verified": False, "message": f"Eroare internă: {e}"}
