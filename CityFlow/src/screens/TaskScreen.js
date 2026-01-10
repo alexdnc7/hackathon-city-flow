@@ -20,7 +20,7 @@ const TARGET_LOCATION = {
 };
 
 export default function TaskScreen() {
-  const { addCoins } = useUser(); 
+  const { /* addCoins */ } = useUser(); 
   const [loading, setLoading] = useState(false);
   const [taskCompleted, setTaskCompleted] = useState(false);
 
@@ -61,8 +61,8 @@ export default function TaskScreen() {
     if (latDiff < TARGET_LOCATION.radius && longDiff < TARGET_LOCATION.radius) {
       // SUCCESS!
       setTaskCompleted(true);
-      addCoins(50); // Îți intră banii în cont
-      Alert.alert("🎉 Felicitări!", "Ai ajuns la destinație! Ai primit 50 CityCoins.");
+      // Removed coin reward - only confirm completion
+      Alert.alert("🎉 Felicitări!", "Ai ajuns la destinație. Misiune validată.");
     } else {
       // FAIL
       Alert.alert("Mai ai de mers!", "GPS-ul arată că nu ești încă în Parcul Central.");
@@ -77,7 +77,7 @@ export default function TaskScreen() {
         <Text style={styles.description}>
           Mergi în Parcul Central și validează locația pentru a primi recompensă.
         </Text>
-        <Text style={styles.reward}>+50 Coins</Text>
+        {/* Reward display removed per UX request */}
 
         {taskCompleted ? (
           <View style={styles.completedBadge}>

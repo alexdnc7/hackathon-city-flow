@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 // Importăm hook-ul de la bancă
 import { useUser } from '../context/UserContext'; 
-// IMPORT NOU: Funcția de logout ca să poți ieși să testezi Register
+// IMPORT CRITIC: Funcția de logout
 import { logoutUser } from '../services/authService';
 
 const MOCK_VOUCHERS = [
@@ -33,7 +33,7 @@ export default function MarketScreen() {
       setSelectedVoucher(item);
       setModalVisible(true);
     } else {
-      alert("Nu ai destui CityCoins! Mai vizitează locații.");
+      alert("Nu ai suficient credit! Mai vizitează locații pentru a câștiga.");
     }
   };
 
@@ -45,7 +45,7 @@ export default function MarketScreen() {
       <View style={styles.cardInfo}>
         <Text style={styles.shopName}>{item.shop}</Text>
         <Text style={styles.voucherTitle}>{item.title}</Text>
-        <Text style={styles.costText}>{item.cost} Coins</Text>
+        <Text style={styles.costText}>{item.cost}</Text>
       </View>
       <TouchableOpacity style={styles.buyButton} onPress={() => handleBuy(item)}>
         <Text style={styles.buyButtonText}>Cumpără</Text>
@@ -71,7 +71,8 @@ export default function MarketScreen() {
           <Ionicons name="wallet-outline" size={40} color="#333" />
           <View style={{marginLeft: 10}}>
             <Text style={styles.balanceText}>{coins}</Text>
-            <Text style={styles.currencyLabel}>CityCoins</Text>
+            {/* Currency label removed to hide explicit coin wording */}
+            <Text style={styles.currencyLabel} />
           </View>
         </View>
       </View>
@@ -97,10 +98,13 @@ export default function MarketScreen() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Felicitări!</Text>
             <Text style={styles.modalSubtitle}>Arată acest cod la casă:</Text>
+            
             <View style={styles.qrPlaceholder}>
                <Ionicons name="qr-code-outline" size={150} color="black" />
             </View>
+
             <Text style={styles.voucherName}>{selectedVoucher?.title}</Text>
+            
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
               <Text style={styles.closeButtonText}>Închide</Text>
             </TouchableOpacity>

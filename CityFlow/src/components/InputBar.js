@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function InputBar({ onSend, onCameraPress }) {
+export default function InputBar({ onSend, onCameraPress, onGalleryPress }) {
   const [text, setText] = useState('');
 
   const handleSend = () => {
@@ -15,15 +15,15 @@ export default function InputBar({ onSend, onCameraPress }) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        {/* Buton Cameră Negru */}
-        <TouchableOpacity onPress={onCameraPress} style={styles.cameraButton}>
+        {/* Buton Cameră Negru (tap = camera, long-press = galerie) */}
+        <TouchableOpacity onPress={onCameraPress} onLongPress={onGalleryPress} style={styles.cameraButton}>
           <Ionicons name="camera-outline" size={24} color="#FFF" />
         </TouchableOpacity>
         
         {/* Input Gri Rotunjit */}
         <TextInput
           style={styles.input}
-          placeholder="Întreabă AI-ul..."
+          placeholder="Întreabă CityFlow AI..."
           placeholderTextColor="#999"
           value={text}
           onChangeText={setText}

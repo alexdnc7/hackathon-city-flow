@@ -1,7 +1,8 @@
-// src/context/AuthContext.js
-import React, { createContext, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../config/firebase";
+import React, { createContext, useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+// Asigură-te că aici calea către fișierul tău de configurare firebase este corectă
+// De obicei este '../config/firebase' sau '../firebaseConfig'
+import { auth } from '../config/firebase'; 
 
 export const AuthContext = createContext();
 
@@ -10,22 +11,18 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Această funcție ascultă automat schimbările (dacă dai refresh, rămâi logat)
+    // Această funcție ascultă automat dacă userul se loghează sau deloghează
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
 
-    return unsubscribe; // Curățenie când se închide componenta
+    return () => unsubscribe();
   }, []);
 
-  if (loading) {
-    return null; // Sau un Spinner de încărcare, dar null e ok pt început
-  }
-
   return (
-    <AuthContext.Provider value={{ user }}>
-      {children}
+    <AuthContext.Provider value={{ user, loading }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

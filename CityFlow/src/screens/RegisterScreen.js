@@ -32,8 +32,8 @@ export default function RegisterScreen({ navigation }) {
     try {
       // 1. Facem contul în Firebase
       await registerUser(email, password);
-      // 2. AuthContext va detecta automat userul nou și te va duce în Market
-      // Nu e nevoie de navigare manuală
+      // 2. AuthContext va detecta automat userul nou și te va duce în aplicația principală
+      // Nu este nevoie de navigare manuală (router.push sau navigation.navigate)
     } catch (error) {
       Alert.alert("Eroare la înregistrare", error.message);
     } finally {
@@ -44,7 +44,7 @@ export default function RegisterScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Creează Cont</Text>
-      <Text style={styles.subtitle}>Începe cu 0 CityCoins și câștigă vizitând!</Text>
+      <Text style={styles.subtitle}>Începe să explorezi orașul și descoperă locuri frumoase!</Text>
 
       <TextInput
         style={styles.input}
